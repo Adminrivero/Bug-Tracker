@@ -1,0 +1,83 @@
+{% extends "base_auth.html" %}
+
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+
+    <div class="loginColumns animated fadeInDown">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="font-bold">Welcome to BUG TRACKER</h2>
+                <p>
+                    Perfectly designed and precisely prepared dashboard to efficiently manage and track those bugs!
+                </p>
+                <p>
+                    Fully functional bug tracker for teams planning and building great products.
+                </p>
+                <p>
+                    Use this application to track issues as they arise for projects within your organization.
+                </p>
+                <p>
+                    <small>“There are two ways to write error-free programs; only the third one works.” (Alan J. Perlis)</small>
+                </p>
+            </div>
+
+            <div class="col-md-6">
+
+                {% for message in get_flashed_messages(category_filter=["error"]) %}
+                    <div class="alert alert-danger alert-dismissable">
+                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                        <strong>{{ message | safe }}</strong>
+                    </div>
+                {% endfor %}
+
+                <div class="ibox-content">
+                    <form class="m-t" role="form" method="post" action="">
+
+                        <div class="form-group">
+                            <input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" class="form-control" name="password" placeholder="Password" required="">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+
+                        <!--<a href="#">
+                            <small>Forgot password?</small>
+                        </a>-->
+
+                        <p class="text-muted text-center">
+                            <small>Do not have an account?</small>
+                        </p>
+                        <a class="btn btn-sm btn-white btn-block" href="{{ url_for('auth.register') }}">Create an account</a>
+                    </form>
+                    <p class="m-t">
+                        <small>Bug Tracker App using Flask and Bootstrap 3 &copy; 2019</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-6">
+                2019 © Bug Tracker by Hector Rivero
+            </div>
+            
+            <div class="col-md-6 text-right">
+            <small>© 2019-2020 | CS50 Final Project</small>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <!-- Bootstrap3 -->
+    <script src="{{ url_for('static', filename='js/bootstrap4/bootstrap.min.js') }}"></script>
+{% endblock javascripts %}

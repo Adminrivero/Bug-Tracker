@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %} Edit User {% endblock title %}
+
+{% block stylesheets %}
+    {{ super() }}
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Edit User</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ url_for('dashboard.index') }}">Home</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('user.users') }}">Users</a>
+                </li>
+                <li class="active">
+                    <strong>Edit User</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>User Information</h5>
+                        <div class="ibox-tools">
+                            <a href="{{ url_for('user.users') }}" class="btn btn-white btn-bitbucket btn-sm">
+                                <i class="fa fa-level-up"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row m-b-sm m-t-sm">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-2 text-right">
+                                {% if access_delete %}
+                                <form action="{{ url_for('user.delete', id=user['user_id']) }}" method="post">
+                                    <input class="btn btn-outline btn-danger btn-sm" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-2"></div>
+
+                            <div class="col-md-8">
+
+                                {% for message in get_flashed_messages(category_filter=["error"]) %}
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <strong>{{ message | safe }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                                <form class="form-horizontal" method="post" action="">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputName">
+                                            First Name <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="inputName" placeholder="Enter first name" 
+                                                value="{{ request.form['inputName'] or user['first_name'] }}" autofocus required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputLast">
+                                            Last Name <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="inputLast" placeholder="Enter last name" 
+                                                value="{{ request.form['inputLast'] or user['last_name'] }}" required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputEmail">
+                                            Email Address <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="email" class="form-control" name="inputEmail" placeholder="name@example.com" 
+                                                value="{{ request.form['inputEmail'] or user['email'] }}" required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputUsername">
+                                            Username <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="inputUsername" 
+                                                value="{{ user['username'] }}" required="" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputRole">
+                                            User Role <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <label class="radio-inline"><input type="radio" name="inputRole" value="Member" {% if user['user_role'] == 'Member' %} checked {% endif %} >Member</label>
+                                            <label class="radio-inline"><input type="radio" name="inputRole" value="Lead" {% if user['user_role'] == 'Lead' %} checked {% endif %} >Lead</label>
+                                            <label class="radio-inline"><input type="radio" name="inputRole" value="Manager" {% if user['user_role'] == 'Manager' %} checked {% endif %} >Manager</label>
+                                            {% if g.user['user_role'] == 'Administrator' %}
+                                            <label class="radio-inline"><input type="radio" name="inputRole" value="Administrator" {% if user['user_role'] == 'Administrator' %} checked {% endif %} >Administrator</label>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputProject">Assigned Project</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" name="inputProject" id="inputProject" >
+                                                <option></option>
+                                                {% for project in projects %}
+                                                    <option value="{{ project['project_id'] }}" {% if user['assigned_project'] == project['project_id'] %} selected {% endif %} >
+                                                        {{ project['project_name'] }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group text-right">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <a href="{{ url_for('user.users') }}" class="btn btn-default"><i class="fa fa-times"></i> Cancel</a>
+                                            &nbsp;&nbsp;
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-save"></i> Save</button>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                            <div class="col-md-2"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+{% block javascripts %}
+    {{ super() }}
+
+    <script>
+        $(function() {
+            $('input:radio[name="inputRole"]').change(function() {
+                if ($(this).val() == 'Manager' || $(this).val() == 'Administrator') {
+                    $("#inputProject").prop("selectedIndex", 0);
+                    $('#inputProject').attr("disabled","disabled");
+                } else {
+                    $('#inputProject').removeAttr('disabled');
+                }
+            });
+        });
+    </script>
+{% endblock javascripts %}

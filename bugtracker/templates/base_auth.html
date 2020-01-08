@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+
+        {% block meta %}
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {% endblock meta %}
+
+        <title>
+            Bug Tracker - {% block title %}{% endblock %}
+        </title>
+
+        {% block stylesheets %}
+            <!-- Bootstrap  -->
+            <link href="{{ url_for('static', filename='css/bootstrap4/bootstrap.min.css') }}" rel="stylesheet">
+            <!-- Favicon -->
+            <link href="{{ url_for('static', filename='img/brand/favicon.png') }}" rel="shortcut icon" type="image/png">
+            <!-- Fonts -->
+            <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+            <!-- CSS Files -->
+            <link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet">
+            <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+            <link href="{{ url_for('static', filename='css/nav.css') }}" rel="stylesheet">
+        {% endblock stylesheets %}
+
+    {% endblock head %}
+</head>
+
+<body class="gray-bg">
+
+    {% include 'layout/nav-auth.html' %}
+
+    <div class="main-content">
+
+        {% block content %}{% endblock %}
+
+    </div>
+
+    {% block javascripts %}
+    {% endblock javascripts %}
+
+</body>
+
+</html>

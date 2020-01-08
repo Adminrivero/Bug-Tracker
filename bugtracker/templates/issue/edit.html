@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %} Edit Issue {% endblock title %}
+
+{% block stylesheets %}
+    {{ super() }}
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Edit Issue</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ url_for('dashboard.index') }}">Home</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('issue.issues') }}">Issues</a>
+                </li>
+                <li class="active">
+                    <strong>Edit Issue</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Issue Details</h5>
+                        <div class="ibox-tools">
+                            <a href="{{ url_for('issue.issues') }}" class="btn btn-white btn-bitbucket btn-sm">
+                                <i class="fa fa-level-up"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row m-b-sm m-t-sm">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-2 text-right">
+                                {% if access_delete %}
+                                <form action="{{ url_for('issue.delete', id=issue['issue_id']) }}" method="post">
+                                    <input class="btn btn-outline btn-danger btn-sm" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-2"></div>
+
+                            <div class="col-md-8">
+
+                                {% for message in get_flashed_messages(category_filter=["error"]) %}
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <strong>{{ message | safe }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                                <form class="form-horizontal" method="post" action="">
+
+                                    <legend>Issue Details</legend>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inpuSubject">
+                                            Issue Summary <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="inpuSubject" placeholder="Enter issue summary" 
+                                            value="{{ request.form['inpuSubject'] or issue['issue_subject'] }}" autofocus required="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputDesc">Issue Desccription</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control" name="inputDesc" rows="3" placeholder="Enter issue description">{{ request.form['inputDesc'] or issue['issue_desc'] }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputProject">
+                                            Related Project <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" name="inputProject" id="inputProject" required="">
+                                                <option></option>
+                                                {% for project in projects %}
+                                                    <option value="{{ project['project_id'] }}" {% if issue['project_id'] == project['project_id'] %} selected {% endif %} >
+                                                        {{ project['project_name'] }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputIdentBy">
+                                            Identified by <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" name="inputIdentBy" id="inputIdentBy" required="">
+                                                <option></option>
+                                                {% for user in users %}
+                                                    <option value="{{ user['user_id'] }}" {% if issue['identified_by'] == user['user_id'] %} selected {% endif %} >
+                                                        {{ user['first_name'] + ' ' + user['last_name'] }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" id="data_1">
+                                        <label class="control-label col-sm-4" for="inputIdentOn">
+                                            Identified Date <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" autocomplete="off" name="inputIdentOn" 
+                                                    onkeydown="return false" value="{{ request.form['inputIdentOn'] or issue['identified_on'] }}" required="">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <legend>Progress</legend>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputAssigned">Assigned To</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" name="inputAssigned" id="inputAssigned">
+                                                <option></option>
+                                                {% for user in users %}
+                                                    <option value="{{ user['user_id'] }}" {% if issue['assigned_to'] == user['user_id'] %} selected {% endif %} >
+                                                        {{ user['first_name'] + ' ' + user['last_name'] }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputStatus">
+                                            Status <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <label class="radio-inline"><input type="radio" name="inputStatus" value="Open" {% if issue['status'] == 'Open' %} checked {% endif %} >Open</label>
+                                            <label class="radio-inline"><input type="radio" name="inputStatus" value="On-Hold" {% if issue['status'] == 'On-Hold' %} checked {% endif %} >On-Hold</label>
+                                            <label class="radio-inline"><input type="radio" name="inputStatus" value="Closed" {% if issue['status'] == 'Closed' %} checked {% endif %} >Closed</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputPriority">
+                                            Priority <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <label class="radio-inline"><input type="radio" name="inputPriority" value="High" {% if issue['priority'] == 'High' %} checked {% endif %} >High</label>
+                                            <label class="radio-inline"><input type="radio" name="inputPriority" value="Medium" {% if issue['priority'] == 'Medium' %} checked {% endif %} >Medium</label>
+                                            <label class="radio-inline"><input type="radio" name="inputPriority" value="Low" {% if issue['priority'] == 'Low' %} checked {% endif %} >Low</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" id="data_2">
+                                        <label class="control-label col-sm-4" for="inputDueDate">
+                                            Target Resolution Date
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" autocomplete="off" name="inputDueDate" 
+                                                    placeholder="Select target end date" onkeydown="return false" 
+                                                    value="{{ request.form['inputDueDate'] or issue['target_resolution_date'] }}" >
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputProgress">Progress</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control" name="inputProgress" rows="3" placeholder="Enter issue progress">{{ request.form['inputProgress'] or issue['issue_progress'] }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <legend>Resolution</legend>
+
+
+                                    <div class="form-group" id="data_3">
+                                        <label class="control-label col-sm-4" for="inputEndDate">Actual Resolution Date</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" autocomplete="off" name="inputEndDate" 
+                                                    onkeydown="return false" value="{{ request.form['inputEndDate'] or issue['actual_resolution_date'] }}">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputEndSum">Resolution Summary</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control" name="inputEndSum" rows="3" placeholder="Enter resolution summary">{{ request.form['inputEndSum'] or issue['resolution_summary'] }}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group text-right">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <a href="{{ url_for('issue.issues') }}" class="btn btn-default"><i class="fa fa-times"></i> Cancel</a>
+                                            &nbsp;&nbsp;
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-save"></i> Save</button>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                            <div class="col-md-2"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+{% block javascripts %}
+    {{ super() }}
+
+   <!-- Data picker -->
+   <script src="{{ url_for('static', filename='js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+
+    <script>
+        $('#data_1 .input-group.date').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd 00:00:00',
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+        $('#data_2 .input-group.date').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd 00:00:00',
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+        $('#data_3 .input-group.date').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd 00:00:00',
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+    </script>
+{% endblock javascripts %}

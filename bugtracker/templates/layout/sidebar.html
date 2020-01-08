@@ -1,0 +1,42 @@
+        
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">{{ g.user['first_name']+' '+g.user['last_name'] }}</strong>
+                            </span> <span class="text-muted text-xs block">{% if g.user['user_role'] != 'Administrator' %}Project {% endif %}{{ g.user['user_role'] }} <b class="caret"></b></span> </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li><a href="/profile">Profile</a></li>
+                                <li class="divider"></li>
+                                <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+                            </ul>
+                    </div>
+                    <div class="logo-element">
+                        BUG+
+                    </div>
+                </li>
+
+                <li class="active">
+                    <a href="{{ url_for('dashboard.index') }}"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span></a>
+                </li>
+                
+                <li>
+                    <a href="{{ url_for('project.projects') }}"><i class="fa fa-laptop"></i> <span class="nav-label">Projects</span> </a>
+                </li>
+
+                <li>
+                    <a href="/issues"><i class="fa fa-bug"></i> <span class="nav-label">Issue Tracker</span> </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('user.users') }}"><i class="fa fa-users"></i> <span class="nav-label">Users</span> </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('user.profile') }}"><i class="fa fa-user"></i> <span class="nav-label">User Profile</span> </a>
+                </li>
+            </ul>
+        </div>
+    </nav>

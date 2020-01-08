@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block head %}
+
+        {% block meta %}
+            <meta charset="utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        {% endblock meta %}
+
+        <title>
+            Bug Tracker - {% block title %}{% endblock %}
+        </title>
+
+        {% block stylesheets %}
+            <!-- Favicon -->
+            <link href="{{ url_for('static', filename='img/brand/favicon.png') }}" rel="shortcut icon" type="image/png">
+            <!-- Bootstrap -->
+            <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+            <!-- Fonts -->
+            <link href="{{ url_for('static', filename='font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+            <!-- CSS Files -->
+            <link href="{{ url_for('static', filename='css/animate.css') }}" rel="stylesheet">
+            <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+        {% endblock stylesheets %}
+
+    {% endblock head %}
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        {% include "layout/sidebar.html" %}
+
+        <div id="page-wrapper" class="gray-bg">
+
+            {% include "layout/navigation.html" %}
+
+            {% block content %}{% endblock content %}
+
+            {% include "layout/footer.html" %}
+
+        </div>
+
+    </div>
+
+    {% block javascripts %}
+        <!-- Core -->
+        <script src="{{ url_for('static', filename='js/jquery-3.1.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+        <!-- Optional JS -->
+        <script src="{{ url_for('static', filename='js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+
+        <!-- Custom and Plugins JS -->
+        <script src="{{ url_for('static', filename='js/inspinia.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/plugins/pace/pace.min.js') }}"></script>
+    {% endblock javascripts %}
+
+</body>
+
+</html>

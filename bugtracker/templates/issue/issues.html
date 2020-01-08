@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %} Projects {% endblock title %}
+
+{% block stylesheets %}
+    {{ super() }}
+    
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Issue list</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ url_for('dashboard.index') }}">Home</a>
+                </li>
+                <li class="active">
+                    <strong>Issue list</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Issue list</h5>
+                        <div class="ibox-tools">
+                            <a href="{{ url_for('issue.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Add Issue</a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row m-b-sm m-t-sm">
+                            <div class="col-md-9">
+                                <div data-toggle="buttons" class="btn-group">
+                                    <label class="btn btn-sm btn-white"> <input type="radio" id="option1" name="options"> Day </label>
+                                    <label class="btn btn-sm btn-white"> <input type="radio" id="option2" name="options"> Week </label>
+                                    <label class="btn btn-sm btn-white active"> <input type="radio" id="option3" name="options"> Month </label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3"></div>
+                        </div>
+
+                        <br>
+
+                        <div class="issue-list">
+
+                            <table class="table table-hover display" id="t_issues">
+                                <thead>
+                                    <tr>
+                                        <th data-visible="false">Id</th>
+                                        <th>Status</th>
+                                        <th>Issue Sumary</th>
+                                        <th>Identified On</th>
+                                        <th>Priority</th>
+                                        <th>Target End Date</th>
+                                        <th>Progress</th>
+                                        <th>Actual End Date</th>
+                                        <th>Identified By</th>
+                                        <th>Project Name</th>
+                                        <th>Assigned To</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    
+                                    {% for issue in issues %}
+                                    <tr>
+                                        <td>
+                                            {{ issue['issue_id'] }}
+                                        </td>
+
+                                        {% if issue['status'] == 'Closed' %}
+                                            <td class="issue-status">
+                                                <span class="label">Closed</span>
+                                            </td>
+                                        {% elif issue['status'] == 'On-Hold' %}
+                                            <td class="issue-status">
+                                                <span class="label label-warning">On-Hold</span>
+                                            </td>
+                                        {% else %}
+                                            <td class="issue-status">
+                                                <span class="label label-primary">Open</span>
+                                            </td>
+                                        {% endif %}
+
+                                        <td class="issue-subject" width="30%">
+                                            {{ issue['issue_subject'] }}
+                                        </td>
+
+                                        <td class="issue-identified-date">
+                                            <p>{{ issue['identified_on'].strftime('%b %d, %Y') }}</p>
+                                        </td>
+
+                                        {% if issue['priority'] == 'High' %}
+                                            <td class="issue-priority">
+                                                <span class="badge badge-danger">High</span>
+                                            </td>
+                                        {% elif issue['priority'] == 'Medium' %}
+                                            <td class="issue-priority">
+                                                <span class="badge badge-warning">Medium</span>
+                                            </td>
+                                        {% else %}
+                                            <td class="issue-priority">
+                                                <span class="badge badge-info">Low</span>
+                                            </td>
+                                        {% endif %}
+
+                                        <td class="issue-due-date">
+                                            {{ issue['target_resolution_date'].strftime('%b %d, %Y') }}
+                                        </td>
+
+                                        <td class="issue-progress">
+                                            {{ issue['issue_progress'] }}
+                                        </td>
+
+                                        <td class="issue-resolution-date">
+                                            {% if issue['actual_resolution_date'] %}
+                                                {{ issue['actual_resolution_date'].strftime('%b %d, %Y') }}
+                                            {% else %}
+                                                <code>In progress</code>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="issue-identified-by">
+                                            {{ issue['identified_by'] }}
+                                        </td>
+
+                                        <td class="issue-project-name">
+                                            {{ issue['project_name'] }}
+                                        </td>
+
+                                        <td class="issue-assigned-to">
+                                            {{ issue['assigned_to'] }}
+                                        </td>
+
+                                        <td class="issue-actions" style="text-align: left;">
+                                            <a href="{{ url_for('issue.edit', id=issue['issue_id']) }}" class="btn btn-white btn-sm"><i class="fa fa-pencil"></i> Edit </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+{% block javascripts %}
+    {{ super() }}
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+    <script>
+        //$('#t_issues').DataTable();
+        $('#t_issues').DataTable( {
+            "order": [[ 0, "desc" ]]
+        } );
+    </script>
+{% endblock javascripts %}

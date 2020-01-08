@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %} Create Project {% endblock title %}
+
+{% block stylesheets %}
+    {{ super() }}
+    
+    <link href="{{ url_for('static', filename='css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
+{% endblock stylesheets %}
+
+
+{% block content %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Create Project</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{{ url_for('dashboard.index') }}">Home</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('project.projects') }}">Projects</a>
+                </li>
+                <li class="active">
+                    <strong>Create Project</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInUp">
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>New Project</h5>
+                        <div class="ibox-tools">
+                            <a href="{{ url_for('project.projects') }}" class="btn btn-white btn-bitbucket btn-sm">
+                                <i class="fa fa-level-up"></i> Go Back
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row m-b-sm m-t-sm">
+                            <div class="col-md-10"></div>
+                            <div class="col-md-2 text-right"></div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col-md-2"></div>
+
+                            <div class="col-md-8">
+
+                                {% for message in get_flashed_messages(category_filter=["error"]) %}
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <strong>{{ message | safe }}</strong>
+                                    </div>
+                                {% endfor %}
+
+                                <form class="form-horizontal" method="post" action="">
+
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputPName">
+                                            Project Name <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" name="inputPName" 
+                                                placeholder="Enter project name" autofocus required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-sm-4" for="inputPName">Description</label>
+                                        <div class="col-sm-8">
+                                            <textarea class="form-control" name="inputPDesc" rows="3" 
+                                                placeholder="Enter project description"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="data_1">
+                                        <label class="control-label col-sm-4" for="inputSDate">
+                                            Start Date <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" autocomplete="off" name="inputSDate" 
+                                                    placeholder="Select project start date" onkeydown="return false" required="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="data_2">
+                                        <label class="control-label col-sm-4" for="inputTDate">
+                                            Target End Date <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" autocomplete="off" name="inputTDate" 
+                                                    placeholder="Select target end date" onkeydown="return false" required="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="data_3">
+                                        <label class="control-label col-sm-4" for="inputEDate">Actual End Date</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                <input type="text" class="form-control" autocomplete="off" name="inputEDate" 
+                                                    placeholder="Select actual end date" onkeydown="return false">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group text-right">
+                                        <div class="col-sm-offset-2 col-sm-10">
+                                            <a href="{{ url_for('project.projects') }}" class="btn btn-default"><i class="fa fa-times"></i> Cancel</a>
+                                            &nbsp;&nbsp;
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-save"></i> Create</button>
+                                        </div>
+
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                            <div class="col-md-2"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+{% block javascripts %}
+    {{ super() }}
+
+   <!-- Data picker -->
+   <script src="{{ url_for('static', filename='js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+
+    <script>
+        $('#data_1 .input-group.date').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd 00:00:00',
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+        $('#data_2 .input-group.date').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd 00:00:00',
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+        $('#data_3 .input-group.date').datepicker({
+            todayBtn: "linked",
+            format: 'yyyy-mm-dd 00:00:00',
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+    </script>
+{% endblock javascripts %}

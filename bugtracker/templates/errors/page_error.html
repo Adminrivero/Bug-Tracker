@@ -1,0 +1,20 @@
+{% extends "base_auth.html" %}
+
+{% block title %} Page Error {% endblock title %}
+
+{% block content %}
+
+    <div class="middle-box text-center animated fadeInDown">
+        <h1>Error {{ code }}</h1>
+        <h3 class="font-bold">{{ name }}</h3>
+
+        <div class="error-desc">
+            {{ desc }}
+        </div>
+
+        <div class="card-body text-center px-lg-5 py-lg-5">
+            <a href="/">Home</a>
+        </div>
+    </div>
+
+{% endblock content %}

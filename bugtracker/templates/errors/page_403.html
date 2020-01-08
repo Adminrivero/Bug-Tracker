@@ -1,0 +1,20 @@
+{% extends "base_auth.html" %}
+
+{% block title %} Error 403 {% endblock title %}
+
+{% block content %}
+
+    <div class="middle-box text-center animated fadeInDown">
+        <h1>Error 403</h1>
+        <h3 class="font-bold">Access Denied</h3>
+
+        <div class="error-desc">
+            Full authentication is required to access this resource.
+        </div>
+
+        <div class="card-body text-center px-lg-5 py-lg-5">
+            <a href="/">Home</a>
+        </div>
+    </div>
+
+{% endblock content %}
