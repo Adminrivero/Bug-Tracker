@@ -6,7 +6,7 @@ The application was created using Flask, a micro web framework written in Python
 
 ### Installation
 
-Get the project code
+Get the project's code
 
 ```BASH
 $ git clone https://github.com/Adminrivero/Bug-Tracker.git
